@@ -1,5 +1,9 @@
 const getById = (userId) => {
-    return db.query('SELECT * FROM usuarios WHERE id=?', [userId]);
+    return db.query('SELECT * FROM usuarios WHERE id=? AND borrado=0', [userId]);
+}
+
+const getByEmail = (email) => {
+    return db.query('SELECT * FROM usuarios WHERE email=? AND borrado=0', [email]);
 }
 
 const create = ({ nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, edad, fecha_nacimiento, genero, dni, rol }) => {
@@ -10,5 +14,5 @@ const create = ({ nombre, apellidos, username, email, password, telefono, direcc
 
 
 module.exports = {
-    create, getById
+    create, getById, getByEmail
 }

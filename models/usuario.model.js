@@ -1,9 +1,12 @@
-//obtener el listado de alumnos o profesores no borrados
-const getByRol = (rol) => {
-    return db.query('SELECT * FROM usuarios WHERE rol=? AND borrado=0', [rol]);
+//obtener el listado de alumnos o profesores si borrados viene sin valor es falso y no se muestran los borrados, si es true su muestran
+const getByRol = (rol, borrados = false) => {
+    const queryBorrados = (!borrados) ? ' AND borrado=0' : '';
+    return db.query(`SELECT * FROM usuarios WHERE rol=?${queryBorrados}`, [rol]);
 }
-const getById = (userId) => {
-    return db.query('SELECT * FROM usuarios WHERE id=? AND borrado=0', [userId]);
+//obtener por id un usuario si borrado viene sin valor es falso y no se muestran si esta borrado, si viene true se muestra
+const getById = (userId, borrado = false) => {
+    const queryBorrado = (!borrado) ? ' AND borrado=0' : '';
+    return db.query(`SELECT * FROM usuarios WHERE id=?${queryBorrado}`, [userId]);
 }
 
 const getByEmail = (email) => {
@@ -16,7 +19,6 @@ const create = ({ nombre, apellidos, username, email, password, telefono, direcc
         [nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, edad, fecha_nacimiento, genero, dni, rol]);
 }
 
-//antes de pasar los valores encriptar password
 const update = (usuarioId, { nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, edad, fecha_nacimiento, genero, dni, rol }) => {
     return db.query(
         'UPDATE usuarios SET nombre=?, apellidos=?, username=?, email=?, password=?, telefono=?, direccion=?, ciudad=?, latitud=?, longitud=?, edad=?, fecha_nacimiento=?, genero=?, dni=?, rol=? WHERE id=?',

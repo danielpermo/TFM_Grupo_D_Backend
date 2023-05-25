@@ -1,0 +1,39 @@
+@host = http://localhost:3000
+
+GET {{host}}/api/asignaturas/filtro
+Content-Type: application/json
+
+{
+    "rama": "Ciencias",
+    "nombre": "Historia"
+}
+
+
+###
+
+GET {{host}}/api/asignaturas/
+
+###
+
+GET {{host}}/api/alumnos/
+Content-Type: application/json
+
+{
+    "rama": "Ciencias",
+    "nombre": "Historia"
+}
+
+
+###
+
+GET {{host}}/api/asignaturas/3
+
+###
+
+PUT {{host}}/api/asignaturas/1
+Content-Type: application/json
+
+{
+    "nombre": "Dibujo técnico",
+    "rama": "Ciencias"
+}

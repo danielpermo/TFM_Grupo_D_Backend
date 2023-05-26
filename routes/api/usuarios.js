@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const { create, getById, getByEmail } = require('../../models/usuario.model');
 const { getById: getAsignaturaById } = require('../../models/asignatura.model');
 const { create: createProfeAsignatura } = require('../../models/profesor_asignatura.model');
-const { create: createProfe, getById: getProfeById } = require('../../models/profesor.model');
+const { create: createProfe, getByUsuarioId: getProfeByUsuarioId } = require('../../models/profesor.model');
 const { createToken, getCoordenadas } = require('../../utils/helpers');
 
 router.post('/registro', async (req, res) => {
@@ -22,12 +22,12 @@ router.post('/registro', async (req, res) => {
         const [usuarioArr] = await getById(result.insertId);
         const usuario = usuarioArr[0];
 
-        if (req.body.rol != "profe") {
+        if (req.body.rol !== "profe") {
             return res.json(usuario);
         }
         //Si el rol es profe añadir registro a tabla profesor
         const [resultProfe] = await createProfe(usuario.id, req.body);
-        const [profeArr] = await getProfeById(usuario.id);
+        const [profeArr] = await getProfeByUsuarioId(usuario.id);
         const profe = profeArr[0];
         delete profe.id;
         delete profe.usuario_id;

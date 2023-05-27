@@ -27,7 +27,7 @@ const update = (usuarioId, { nombre, apellidos, username, email, password, telef
 }
 
 //borrado lógico de usuarios
-const deleteById = ({ borrado }, usuarioId) => {
+const deleteById = (usuarioId, { borrado }) => {
     return db.query('UPDATE usuarios SET borrado=? WHERE id=?', [borrado, usuarioId]);
 }
 

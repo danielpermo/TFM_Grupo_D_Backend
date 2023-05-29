@@ -42,7 +42,6 @@ router.get('/filtro', async (req, res) =>{
 
 router.get('/:asignaturaId', async (req, res) => {
 
-    console.log('hola');
     const { asignaturaId } = req.params;
     try {
         const asignatura = await getById(asignaturaId);

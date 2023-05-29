@@ -1,5 +1,5 @@
 const getProfesoresPublic = () => {
-    return db.query('SELECT u.id, u.nombre, u.apellidos FROM usuarios AS u, profesores AS p WHERE u.rol="profe" AND u.id=p.usuario_id AND u.borrado=0 AND p.validado=1');
+    return db.query('SELECT u.id, u.nombre, u.apellidos, p.experiencia, p.precio FROM usuarios AS u, profesores AS p WHERE u.rol="profe" AND u.id=p.usuario_id AND u.borrado=0 AND p.validado=1');
 }
 
 const getByUsuarioId = (usuarioId, validado = true) => {

@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+const { getMediaPuntuacion } = require('../../models/clase.model');
 const { getProfesoresPublic } = require('../../models/profesor.model');
 const { getAsiganturasByProfesorId } = require('../../models/profesor_asignatura.model');
 
@@ -12,6 +13,9 @@ router.get('/', async (req, res) => {
         }
 
         for (let usuario of usuarios) {
+            const [puntuacion] = await getMediaPuntuacion(usuario.id);
+            const media = puntuacion[0].media;
+            usuario.puntuacion = (!media) ? 'No valorado' : media;
             const [asignaturas] = await getAsiganturasByProfesorId(usuario.id);
             usuario.asignaturas = asignaturas;
         }

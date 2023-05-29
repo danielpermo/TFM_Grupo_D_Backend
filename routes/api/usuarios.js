@@ -20,18 +20,19 @@ router.post('/registro', async (req, res) => {
 
         const [result] = await create(req.body);
         const [usuarioArr] = await getById(result.insertId);
-        const usuario = usuarioArr[0];
+        let usuario = usuarioArr[0];
 
         if (req.body.rol !== "profe") {
             return res.json(usuario);
         }
+        console.log(usuario.id, req.body);
         //Si el rol es profe añadir registro a tabla profesor
         const [resultProfe] = await createProfe(usuario.id, req.body);
-        const [profeArr] = await getProfeByUsuarioId(usuario.id);
+        const [profeArr] = await getProfeByUsuarioId(usuario.id, false);
         const profe = profeArr[0];
         delete profe.id;
         delete profe.usuario_id;
-        usuario = { ...usuario, ...profe }; //Object.assign(usuario, profe);
+        usuario = { ...usuario, ...profe }; //Object.assign(usuario, profe);+/
 
         //comprobamos que nos llegan asignaturas
         const asignaturasArr = req.body.asignaturas;

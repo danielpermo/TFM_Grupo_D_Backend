@@ -3,12 +3,13 @@ const getProfesoresPublic = () => {
 }
 
 const getByUsuarioId = (usuarioId, validado = true) => {
-    const validadoQuery = (validado) ? ' AND validado=1' : '';
+    const validadoQuery = (validado) ? ' AND validado=1' : ''; //Por defecto solo vemos los profesores validados, pero si pasamos falso vemos todos (administradores)
     return db.query(`SELECT * FROM profesores WHERE usuario_id=?${validadoQuery}`, [usuarioId]);
 }
 
-const getProfesorByUsuarioId = (usuarioId) => {
-    return db.query('SELECT * FROM usuarios AS u, profesores AS p WHERE u.id=? AND u.id=p.usuario_id AND u.rol="profe" AND u.borrado=0 AND p.validado=1');
+const getProfesorByUsuarioId = (usuarioId, validado = true) => {
+    const validadoQuery = (validado) ? ' AND validado=1' : '';//Por defecto solo vemos los profesores validados, pero si pasamos falso vemos todos (administradores)
+    return db.query(`SELECT u.*, p.experiencia, p.precio, p.validado FROM usuarios AS u, profesores AS p WHERE u.id=? AND u.id=p.usuario_id AND u.rol="profe" AND u.borrado=0${validadoQuery}`, [usuarioId]);
 }
 
 const getByCiudad = (ciudad) => {

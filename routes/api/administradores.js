@@ -1,29 +1,28 @@
 const router = require('express').Router();
 
 const { getByRol, getById: getUsuarioById, deleteById } = require('../../models/usuario.model');
-const { getByUsuarioId: getProfeByUsuarioId, updateValidacion } = require('../../models/profesor.model');
+const { updateValidacion, getProfesorByUsuarioId } = require('../../models/profesor.model');
+const { addProfesorAUsuario } = require('../../utils/helpers');
 
 router.get('/:usuarioId', async (req, res) => {
     const { usuarioId } = req.params;
 
     try {
-        const [result] = await getUsuarioById(usuarioId, true);
+        const [result] = await getUsuarioById(usuarioId);
+
+        if (result.length === 0) {
+            return res.json('El usuario no existe');
+        }
+
         let usuario = result[0];
+        delete usuario.password;
 
         if (usuario.rol !== 'profe') {
             return res.json(usuario);
         }
 
-        const [resultProfe] = await getProfeByUsuarioId(usuarioId);
-
-        if (resultProfe.length > 0) {
-            const profesor = resultProfe[0];
-            delete profesor.id;
-            delete profesor.usuario_id;
-            usuario = { ...usuario, ...profesor };
-        }
-
-        res.json(usuario);
+        const profesor = await addProfesorAUsuario(usuario);
+        res.json(profesor);
     } catch (error) {
         res.status(503).json({ Error: error.message });
     }
@@ -33,7 +32,7 @@ router.get('/listado/:rol', async (req, res) => {
     const { rol } = req.params;
 
     try {
-        const [usuarios] = await getByRol(rol, true);
+        const [usuarios] = await getByRol(rol);
 
         if (usuarios.length === 0) {
             return res.json('Error: no existen usuarios con ese rol');
@@ -46,16 +45,9 @@ router.get('/listado/:rol', async (req, res) => {
         const profesores = [];
 
         for (let usuario of usuarios) {
-            const [result] = await getProfeByUsuarioId(usuario.id);
-
-            if (result.length > 0) {
-                const profesor = result[0];
-                delete profesor.id;
-                delete profesor.usuario_id;
-                usuario = { ...usuario, ...profesor };
-            }
-
-            profesores.push(usuario);
+            delete usuario.password;
+            const profesor = await addProfesorAUsuario(usuario);
+            profesores.push(profesor);
         }
 
         res.json(profesores);
@@ -64,23 +56,18 @@ router.get('/listado/:rol', async (req, res) => {
     }
 });
 
-router.put('/:usuarioId', async (req, res) => {//validar profesor
+router.patch('/:usuarioId', async (req, res) => {//validar profesor
     const { usuarioId } = req.params;
 
     try {
         await updateValidacion(usuarioId, req.body);
-        const [result] = await getProfeByUsuarioId(usuarioId)
+        const [result] = await getProfesorByUsuarioId(usuarioId, false);
 
         if (result.length === 0) {
             return res.json('Error: el usuario no existe');
         }
 
-        const profesor = result[0];
-        delete profesor.id;
-        delete profesor.usuario_id;
-        const [resulUsuario] = await getUsuarioById(usuarioId, true);
-        const usuario = { ...resulUsuario[0], ...profesor }
-        res.json(usuario)
+        res.json(result[0])
     } catch (error) {
         res.status(503).json({ Error: error.message });
     }

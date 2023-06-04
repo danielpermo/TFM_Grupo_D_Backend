@@ -30,15 +30,13 @@ GET {{host}}/api/asignaturas/3
 
 ###
 
-POST  {{host}}/api/clases
+PUT {{host}}/api/clases/claseProfesorAlumno
 Content-Type: application/json
 
 {
-    "profesor_id": "1",
-    "asignatura_id": "1",
-    "alumno_id": "7",
-    "puntuacion": "8",
-    "opinion": "Este profesor sabe de lo que habla."
+    "profesor_id": "2",
+    "asignatura_id": "2",
+    "alumno_id": "8"
 }
 
 ### 

@@ -25,9 +25,17 @@ const getAllByProfesorId = (profesorId) => {
 )};
 
 const deleteById = (claseId) => {
-    return db.query('delete from clases where id = ?', [claseId]);
-}
+    return db.query('UPDATE clases SET finalizado = 1 where id = ?', [claseId]);
+};
+
+const deleteByPrAs = ({profesor_id, asignatura_id}) => {
+    return db.query('UPDATE clases SET finalizado = 1 where profesor_id = ? and asignatura_id = ?', [profesor_id, asignatura_id]);
+};
+
+const deleteByAlumno = ({profesor_id, asignatura_id, alumno_id }) => {
+    return db.query('UPDATE clases SET finalizado = 1 where profesor_id = ? and asignatura_id = ? and alumno_id = ?', [profesor_id, asignatura_id, alumno_id]);
+};
 
 module.exports = {
-    getAll, getAllByProfesorId, getMediaPuntuacion, create, getById, deleteById
+    getAll, getAllByProfesorId, getMediaPuntuacion, create, getById, deleteById, deleteByPrAs, deleteByAlumno
 }

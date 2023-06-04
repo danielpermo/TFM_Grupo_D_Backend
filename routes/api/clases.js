@@ -1,4 +1,4 @@
-const { getAll, getAllByProfesorId, getMediaPuntuacion, create, getById, deleteById } = require('../../models/clase.model');
+const { getAll, getAllByProfesorId, getMediaPuntuacion, create, getById, deleteById, deleteByPrAs, deleteByAlumno } = require('../../models/clase.model');
 
 
 const router = require('express').Router();
@@ -71,12 +71,37 @@ router.post('/', async (req, res) => {
     }
 })
 
-router.delete('/:claseId', async (req, res) => { //borrado logico
+router.put('/claseProfesor', async (req, res) => { //borrado logico
+
+    try {
+
+        const [result] = await deleteByPrAs(req.body);
+
+        res.json(result);
+
+    } catch (error) {
+        res.status(503).json({ Error: error.message });
+    }
+});
+
+router.put('/claseProfesorAlumno', async (req, res) => { //borrado logico
+
+    try {
+
+        const [result] = await deleteByAlumno(req.body);
+
+        res.json(result);
+
+    } catch (error) {
+        res.status(503).json({ Error: error.message });
+    }
+});
+
+router.put('/:claseId', async (req, res) => { //borrado logico
     const { claseId } = req.params;
 
     try {
 
-        
         const [result] = await getById(claseId);
         
         if (result.length === 0) 

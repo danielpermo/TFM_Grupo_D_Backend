@@ -67,6 +67,19 @@ const addProfesorAUsuario = async (usuario) => {
 
 }
 
+const getProfesorAndClases = async (usuario) => {
+
+    try {
+        const profesor = await addProfesorAUsuario(usuario);
+        const [asignaturas] = await getAsiganturasByProfesorId(usuario.id);
+        profesor.asignaturas = asignaturas;
+        delete profesor.password;
+        return profesor;
+    } catch (error) {
+        return error.message;
+    }
+}
+
 module.exports = {
-    createToken, getCoordenadas, addAsignaturasValoracionAProfesores, addProfesorAUsuario
+    createToken, getCoordenadas, addAsignaturasValoracionAProfesores, addProfesorAUsuario, getProfesorAndClases
 }

@@ -13,6 +13,10 @@ const getAllByProfesorId = (profesorId) => {
     return db.query('select * from clases where profesor_id = ?', [profesorId]);
 }
 
+const getAsignaturasByAlumnoAndProfesor = (alumnoId, profesorId) => {
+    return db.query('SELECT c.asignatura_id, a.nombre, c.finalizado FROM clases AS c, asignaturas AS a  WHERE c.alumno_id=? AND c.profesor_id=? AND c.asignatura_id=a.id', [alumnoId, profesorId]);
+}
+
 const getMediaPuntuacion = (profesorId) => {
 
     return db.query('select AVG(puntuacion) as media from clases where profesor_id = ?', [profesorId]);
@@ -44,5 +48,5 @@ const deleteByAlumno = (profesor_id, asignatura_id, alumno_id) => {
 };
 
 module.exports = {
-    getAll, getAllByProfesorId, getMediaPuntuacion, create, getById, deleteById, deleteByPrAs, deleteByAlumno, getByPrAlAs
+    getAll, getAllByProfesorId, getAsignaturasByAlumnoAndProfesor, getMediaPuntuacion, create, getById, deleteById, deleteByPrAs, deleteByAlumno, getByPrAlAs
 }

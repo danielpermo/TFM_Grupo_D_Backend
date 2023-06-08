@@ -15,7 +15,7 @@ const getByEmail = (email) => {
 
 const getAlumnosByProfesorID = (profesorId) => {
     return db.query(
-        'SELECT u.*, GROUP_CONCAT(a.nombre) AS "asignaturas" FROM clases AS c, asignaturas AS a, usuarios AS u WHERE profesor_id = ? AND u.id=c.alumno_id AND c.asignatura_id = a.id GROUP BY c.alumno_id;', [profesorId]);
+        'SELECT u.* FROM clases AS c, usuarios AS u WHERE profesor_id = ? AND u.id=c.alumno_id GROUP BY c.alumno_id;', [profesorId]);
 }
 
 const create = ({ nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, edad, fecha_nacimiento, genero, dni, rol }) => {

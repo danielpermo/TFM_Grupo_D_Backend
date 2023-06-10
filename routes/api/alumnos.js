@@ -1,4 +1,6 @@
 const { getAll, getById, deleteById, getByNombre, getByEmail } = require('../../models/alumno.model');
+const { getAsignaturasByAlumnoid } = require('../../models/clase.model');
+const { getClasesActivas } = require('../../models/profesor_asignatura.model');
 
 const router = require('express').Router();
 
@@ -7,6 +9,35 @@ router.get('/', async (req, res) => {
         const [result] = await getAll();
 
         res.json(result);
+
+    } catch (error) {
+        res.status(503).json({ fatal: error.message });
+    }
+
+});
+
+router.get('/clases', async (req, res) => {
+    try {
+        const [asignaturasActivas] = await getClasesActivas();
+        console.log(req.usuario.id);
+        const [asignaturasAlumno] = await getAsignaturasByAlumnoid(req.usuario.id);
+
+        const result = asignaturasActivas.filter(asignatura1 => {return asignaturasAlumno.some(asignatura2 => asignatura1.asignatura_id === asignatura2.id)})
+
+
+        res.json(result);
+
+    } catch (error) {
+        res.status(503).json({ fatal: error.message });
+    }
+
+});
+
+router.get('/clasesActivas', async (req, res) => {
+    try {
+        const [asignaturasActivas] = await getClasesActivas();
+
+        res.json(asignaturasActivas);
 
     } catch (error) {
         res.status(503).json({ fatal: error.message });

@@ -1,52 +1,131 @@
 const router = require('express').Router();
 
-const { getProfesoresPublic, getByCiudad, getByAsignatura } = require('../../models/profesor.model');
-const { addAsignaturasValoracionAProfesores } = require('../../utils/helpers');
+const { update: updateProfesor } = require('../../models/profesor.model');
+const { updateClase, getByAsignaturaAndProfesorId, create: createAsignaturaByProfesorId, deleteByAsignaturaAndProfesorId } = require('../../models/profesor_asignatura.model');
+const { update: updateUsuario, getById: getByUsuarioId } = require('../../models/usuario.model');
+const { deleteByAlumno } = require('../../models/clase.model');
+const { getCoordenadas, getProfesorAndClases, getAlumnosWhithClasesByProfesorId } = require('../../utils/helpers');
+const { deleteByPrAs } = require('../../models/clase.model');
 
-router.get('/', async (req, res) => {
+router.get('/alumnos/', async (req, res) => {
+    const usuarioId = req.usuario.id;
+
     try {
-
-        const [usuarios] = await getProfesoresPublic();
-        if (usuarios.length === 0) {
-            return res.json('No hay profesores');
-        }
-
-        const profesores = await addAsignaturasValoracionAProfesores(usuarios);
-        res.json(profesores);
+        const alumnos = await getAlumnosWhithClasesByProfesorId(usuarioId);
+        res.json(alumnos);
     } catch (error) {
         res.status(503).json({ Error: error.message });
     }
 })
 
-router.get('/ciudad/:ciudad', async (req, res) => {
-    const { ciudad } = req.params;
+router.get('/perfil', async (req, res) => {
 
     try {
-        const [usuarios] = await getByCiudad(ciudad);
-        if (usuarios.length === 0) {
-            return res.json('No hay profesores en la ciudad seleccionada');
-        }
-
-        const profesores = await addAsignaturasValoracionAProfesores(usuarios);
-        res.json(profesores);
+        const profesor = await getProfesorAndClases(req.usuario);
+        res.json(profesor);
     } catch (error) {
         res.status(503).json({ Error: error.message });
     }
 });
 
-router.get('/asignatura/:asignaturaId', async (req, res) => {
-    const { asignaturaId } = req.params;
+router.put('/', async (req, res) => {//modificar datos profesor
+    const usuarioId = req.usuario.id;
 
     try {
-        const [usuarios] = await getByAsignatura(asignaturaId);
-        if (usuarios.length === 0) {
-            return res.json('No hay profesores que impartan la asignatura');
+        if (req.usuario.direccion !== req.body.direccion || req.usuario.ciudad !== req.body.direccion) {
+            const ubicacion = await getCoordenadas(req.body.direccion, req.body.ciudad);
+            req.body.latitud = (ubicacion) ? ubicacion.latitude : 0;//solo añadimos latitud y longitud si devuelve el dato, si no se rellena 0
+            req.body.longitud = (ubicacion) ? ubicacion.longitude : 0;
         }
 
-        const profesores = await addAsignaturasValoracionAProfesores(usuarios);
-        res.json(profesores);
+        await updateUsuario(usuarioId, req.body);
+        await updateProfesor(usuarioId, req.body);
+        const [usuario] = await getByUsuarioId(usuarioId);
+        const profesor = await getProfesorAndClases(usuario[0]);
+        res.json(profesor);
     } catch (error) {
-        res.status(503).json()
+        res.status(503).json({ Error: error.message });
+    }
+});
+
+router.patch('/clases/:asignaturaId', async (req, res) => { //crear una clase para la asignatura
+    const { asignaturaId } = req.params;
+    const usuarioId = req.usuario.id;
+
+    try {
+        await updateClase(usuarioId, asignaturaId, req.body)
+        const profesor = await getProfesorAndClases(req.usuario);
+        res.json(profesor);
+    } catch (error) {
+        res.status(503).json({ Error: error.message });
+    }
+});
+
+router.post('/asignaturas/:asignaturaId', async (req, res) => {//Crear nueva asignatura para ese profesor 
+    const { asignaturaId } = req.params;
+    const usuarioId = req.usuario.id;
+
+    try {
+        await createAsignaturaByProfesorId(usuarioId, asignaturaId);
+        const profesor = await getProfesorAndClases(req.usuario);
+        res.json(profesor);
+    } catch (error) {
+        res.stauts(503).json({ Error: error.message });
+    }
+});
+
+router.delete('/alumnos/:alumnoId', async (req, res) => {//Finalizar clase para un alumno
+    const { alumnoId } = req.params;
+    const usuarioId = req.usuario.id;
+    const { asignatura_id } = req.body;
+    try {
+        const [result] = await deleteByAlumno(usuarioId, asignatura_id, alumnoId);
+
+        const alumnos = await getAlumnosWhithClasesByProfesorId(usuarioId)
+        res.json(alumnos);
+    } catch (error) {
+        res.status(503).json({ Error: error.message });
+    }
+
+});
+
+router.delete('/clases/:asignaturaId', async (req, res) => {//finalizar clase de profesor y asignatura y para todos los alumnos
+    const { asignaturaId } = req.params;
+    const usuarioId = req.usuario.id;
+
+    try {
+        await updateClase(usuarioId, asignaturaId, req.body);
+        await deleteByPrAs(usuarioId, asignaturaId); //finalizamos la clase a todos los alumnos inscritos
+        const profesor = await getProfesorAndClases(req.usuario);
+        res.json(profesor);
+
+    } catch (error) {
+        res.status(503).json({ Error: error.message });
+    }
+
+});
+
+router.delete('/asignaturas/:asignaturaId', async (req, res) => {//Eliminar asignatura a profesor
+    const { asignaturaId } = req.params;
+    const usuarioId = req.usuario.id;
+
+    try {
+        const [result] = await getByAsignaturaAndProfesorId(usuarioId, asignaturaId);
+
+        if (result.length === 0) {
+            return res.json('Error: El profesor no tiene esta asignatura')
+        }
+
+        await deleteByAsignaturaAndProfesorId(usuarioId, asignaturaId);
+
+        if (result[0].clase === 1) {//Comprobamos si la asignatura tiene clase y si tiene la finalizamos para los alumnos
+            await deleteByPrAs(usuarioId, asignaturaId);
+        }
+
+        const profesor = await getProfesorAndClases(req.usuario);
+        res.json(profesor);
+    } catch (error) {
+        res.status(503).json({ Error: error.message });
     }
 })
 

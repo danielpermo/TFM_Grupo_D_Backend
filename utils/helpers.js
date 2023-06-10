@@ -1,9 +1,10 @@
 const dayjs = require('dayjs');
 const jwt = require('jsonwebtoken');
 const NodeGeocoder = require('node-geocoder');
-const { getMediaPuntuacion } = require('../models/clase.model');
-const { getAsiganturasByProfesorId } = require('../models/profesor_asignatura.model');
+const { getMediaPuntuacion, getAsignaturasByAlumnoAndProfesor } = require('../models/clase.model');
 const { getByUsuarioId } = require('../models/profesor.model');
+const { getAlumnosByProfesorID } = require('../models/usuario.model');
+const { getAsiganturasByProfesorId } = require('../models/profesor_asignatura.model');
 
 const createToken = (usuario) => {
     const dataToken = {
@@ -67,6 +68,37 @@ const addProfesorAUsuario = async (usuario) => {
 
 }
 
+const getAlumnosWhithClasesByProfesorId = async (profesorId) => {
+    try {
+        const [alumnos] = await getAlumnosByProfesorID(profesorId);
+
+        if (alumnos.length === 0) {
+            return 'No hay alumnos disponibles';
+        }
+
+        for (let alumno of alumnos) {
+            const [asignaturas] = await getAsignaturasByAlumnoAndProfesor(alumno.id, profesorId);
+            alumno.asignaturas = asignaturas;
+        }
+        return alumnos;
+    } catch (error) {
+        return error.message;
+    }
+}
+
+const getProfesorAndClases = async (usuario) => {
+
+    try {
+        const profesor = await addProfesorAUsuario(usuario);
+        const [asignaturas] = await getAsiganturasByProfesorId(usuario.id);
+        profesor.asignaturas = asignaturas;
+        delete profesor.password;
+        return profesor;
+    } catch (error) {
+        return error.message;
+    }
+}
+
 module.exports = {
-    createToken, getCoordenadas, addAsignaturasValoracionAProfesores, addProfesorAUsuario
+    createToken, getCoordenadas, addAsignaturasValoracionAProfesores, addProfesorAUsuario, getAlumnosWhithClasesByProfesorId, getProfesorAndClases
 }

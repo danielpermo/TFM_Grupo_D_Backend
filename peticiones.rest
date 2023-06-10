@@ -11,22 +11,45 @@ Content-Type: application/json
 
 ###
 
-GET {{host}}/api/clases/media/1
-
-###
-
-GET {{host}}/api/alumnos/
+POST  {{host}}/api/usuarios/login
 Content-Type: application/json
 
 {
-    "rama": "Ciencias",
-    "nombre": "Historia"
+    "email": "benjaluzon01@gmail.com",
+    "password": "hola"
 }
+
+###
+
+POST  {{host}}/api/usuarios/registro
+Content-Type: application/json
+
+{
+    "nombre": "Benjamin", 
+    "apellidos": "Luzon",
+    "username": "Nezarlc",
+    "telefono": 608561642,
+    "dni": "77024990Z",
+    "rol": "alum",
+    "direccion": "Calle sur",
+    "ciudad": "Granada",
+    "edad": 22,
+    "fecha_nacimiento": "2023-05-11",
+    "genero": "m",
+    "email": "benjaluzon01@gmail.com",
+    "password": "hola"
+}
+
+###
+
+GET {{host}}/api/alumnos/clasesActivas
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoxMCwidXN1YXJpb19yb2wiOiJhbHVtIiwiZXhwIjoxNjg2NDk1MTQwLCJpYXQiOjE2ODY0MDg3NDB9.M5XBc-1EzG4jW--j1WOGMZJSDdGu6_-dQBIPBSaO6BE
 
 
 ###
 
-GET {{host}}/api/asignaturas/3
+GET {{host}}/api/alumnos/clases
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoxMSwidXN1YXJpb19yb2wiOiJhbHVtIiwiZXhwIjoxNjg2NDk4MzA0LCJpYXQiOjE2ODY0MTE5MDR9.Xs1jeGMOr-sOY3KuFoWZhu38MogLT3cvwpKxyUWZHKE
 
 ###
 

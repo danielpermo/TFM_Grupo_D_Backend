@@ -33,6 +33,13 @@ const create = ({ profesor_id, asignatura_id, alumno_id, puntuacion, opinion }) 
     )
 };
 
+const createClaseAlumno = ({ profesor_id, asignatura_id, puntuacion, opinion }, alumno_id) => {
+    return db.query(
+        'insert into clases (profesor_id, asignatura_id, alumno_id, puntuacion, opinion) values (?, ?, ?, ? ,?)',
+        [profesor_id, asignatura_id, alumno_id, puntuacion, opinion]
+    )
+};
+
 const getByPrAlAs = (profesor_id, alumno_id, asignatura_id) => {
     return db.query(
         'select * from clases where profesor_id = ? and alumno_id = ? and asignatura_id = ?', [profesor_id, alumno_id, asignatura_id]
@@ -51,6 +58,10 @@ const deleteByAlumno = (profesor_id, asignatura_id, alumno_id) => {
     return db.query('UPDATE clases SET finalizado = 1 where profesor_id = ? and asignatura_id = ? and alumno_id = ?', [profesor_id, asignatura_id, alumno_id]);
 };
 
+const finalizarClasesProfesor = (profesor_Id) => {
+    return db.query('UPDATE clases SET finalizado = 1 where profesor_id = ?', [profesor_Id]);
+}
+
 module.exports = {
-    getAll, getAllByProfesorId, getAsignaturasByAlumnoAndProfesor, getMediaPuntuacion, create, getById, deleteById, deleteByPrAs, deleteByAlumno, getByPrAlAs, getAsignaturasByAlumnoid
+    getAll, getAllByProfesorId, getAsignaturasByAlumnoAndProfesor, getMediaPuntuacion, create, getById, deleteById, deleteByPrAs, deleteByAlumno, getByPrAlAs, getAsignaturasByAlumnoid, createClaseAlumno
 }

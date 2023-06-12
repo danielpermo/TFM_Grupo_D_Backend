@@ -1,4 +1,4 @@
-const { getAll, getAllByProfesorId, getMediaPuntuacion, create, getById, deleteById, deleteByPrAs, deleteByAlumno, getByPrAlAs } = require('../../models/clase.model');
+const { getAll, getAllByProfesorId, getMediaPuntuacion, create, getById, deleteById, deleteByPrAs, deleteByAlumno, getByPrAlAs, getOpinionMaxPuntuacion } = require('../../models/clase.model');
 
 
 const router = require('express').Router();
@@ -66,6 +66,19 @@ router.get('/:asignaturaId', async (req, res) => {
         }
 
         res.json(clase[0]);
+
+    } catch (error) {
+
+        res.json({ fatal: error.message });
+    }
+});
+
+router.get('/opinion', async (req, res) => {
+
+    try {
+        const opinion = await getOpinionMaxPuntuacion(profesorId);
+
+        res.json(opinion[0][0]);
 
     } catch (error) {
 

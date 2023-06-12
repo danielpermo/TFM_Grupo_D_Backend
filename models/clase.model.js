@@ -40,6 +40,10 @@ const createClaseAlumno = ({ profesor_id, asignatura_id, puntuacion, opinion }, 
     )
 };
 
+const getOpinionMaxPuntuacion = (profesor_id) => {
+    return db.query('select opinion from clases where puntuacion = (select max(puntuacion) from clases where profesor_id = ?) and profesor_id = ?',[profesor_id, profesor_id] );
+}
+
 const getByPrAlAs = (profesor_id, alumno_id, asignatura_id) => {
     return db.query(
         'select * from clases where profesor_id = ? and alumno_id = ? and asignatura_id = ?', [profesor_id, alumno_id, asignatura_id]
@@ -63,5 +67,7 @@ const finalizarClasesProfesor = (profesor_Id) => {
 }
 
 module.exports = {
-    getAll, getAllByProfesorId, getAsignaturasByAlumnoAndProfesor, getMediaPuntuacion, create, getById, deleteById, deleteByPrAs, deleteByAlumno, getByPrAlAs, getAsignaturasByAlumnoid, createClaseAlumno
+    getAll, getAllByProfesorId, getAsignaturasByAlumnoAndProfesor, getMediaPuntuacion, create, getById, 
+    deleteById, deleteByPrAs, deleteByAlumno, getByPrAlAs, getAsignaturasByAlumnoid, createClaseAlumno,
+    getOpinionMaxPuntuacion
 }

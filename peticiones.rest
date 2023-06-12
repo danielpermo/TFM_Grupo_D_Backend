@@ -1,12 +1,7 @@
 @host = http://localhost:3000
 
-GET {{host}}/api/asignaturas/filtro
-Content-Type: application/json
-
-{
-    "rama": "Ciencias",
-    "nombre": "Historia"
-}
+GET {{host}}/api/clases/opinion/2
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo1LCJ1c3VhcmlvX3JvbCI6InByb2ZlIiwiZXhwIjoxNjg2Njc4ODYzLCJpYXQiOjE2ODY1OTI0NjN9.W80B39pHt86yy_dFJGhaWCQeiHPpCC_vBVuIt037Nxc
 
 
 ###
@@ -15,7 +10,7 @@ POST  {{host}}/api/usuarios/login
 Content-Type: application/json
 
 {
-    "email": "benjaluzon01@gmail.com",
+    "email": "anagarcia@example.com",
     "password": "hola"
 }
 
@@ -29,15 +24,17 @@ Content-Type: application/json
     "apellidos": "Luzon",
     "username": "Nezarlc",
     "telefono": 608561642,
-    "dni": "77024990Z",
-    "rol": "alum",
+    "dni": "77024991Z",
+    "rol": "profe",
     "direccion": "Calle sur",
     "ciudad": "Granada",
     "edad": 22,
     "fecha_nacimiento": "2023-05-11",
     "genero": "m",
-    "email": "benjaluzon01@gmail.com",
-    "password": "hola"
+    "email": "benjaluzon03@gmail.com",
+    "password": "hola",
+    "experiencia": 3,
+    "precio": 4
 }
 
 ###

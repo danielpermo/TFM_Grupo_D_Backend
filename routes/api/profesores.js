@@ -1,9 +1,9 @@
 const router = require('express').Router();
 
 const { update: updateProfesor } = require('../../models/profesor.model');
-const { updateClase, getByAsignaturaAndProfesorId, create: createAsignaturaByProfesorId, deleteByAsignaturaAndProfesorId, getClasesActivasByProfesorId } = require('../../models/profesor_asignatura.model');
+const { updateClase, getByAsignaturaAndProfesorId, create: createAsignaturaByProfesorId, deleteByAsignaturaAndProfesorId, getClasesActivasByProfesorId, updateClaseByProfesorId } = require('../../models/profesor_asignatura.model');
 const { update: updateUsuario, getById: getByUsuarioId, deleteById: deleteByUsuarioId } = require('../../models/usuario.model');
-const { deleteByAlumno } = require('../../models/clase.model');
+const { deleteByAlumno, finalizarClasesProfesor } = require('../../models/clase.model');
 const { getCoordenadas, getProfesorAndClases, getAlumnosWhithClasesByProfesorId } = require('../../utils/helpers');
 const { deleteByPrAs } = require('../../models/clase.model');
 
@@ -79,10 +79,12 @@ router.delete('/perfil', async (req, res) => {
 
     try {
         await deleteByUsuarioId(usuarioId, req.body);
-        const [result] = await getClasesActivasByProfesorId(usuarioId);
+        const [clases] = await getClasesActivasByProfesorId(usuarioId);
 
-        if (result.length > 0) {
-            //finalizar todas las clases para todos los alumnos, por id_profesor
+        if (clases.length > 0) {
+            const [asignaturas] = await updateClaseByProfesorId(usuarioId, 0)
+            const [result] = await finalizarClasesProfesor(usuarioId);
+            console.log(asignaturas, result);
         }
         delete req.usuario.password;
         req.usuario.borrado = 1;

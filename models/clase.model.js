@@ -69,5 +69,5 @@ const finalizarClasesProfesor = (profesor_Id) => {
 module.exports = {
     getAll, getAllByProfesorId, getAsignaturasByAlumnoAndProfesor, getMediaPuntuacion, create, getById, 
     deleteById, deleteByPrAs, deleteByAlumno, getByPrAlAs, getAsignaturasByAlumnoid, createClaseAlumno,
-    getOpinionMaxPuntuacion
+    getOpinionMaxPuntuacion, finalizarClasesProfesor
 }

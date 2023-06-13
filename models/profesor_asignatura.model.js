@@ -22,10 +22,14 @@ const updateClase = (profesorId, asignaturaId, { clase }) => {
     return db.query('UPDATE profesores_asignaturas SET clase=? WHERE profesor_id=? AND asignatura_id=?', [clase, profesorId, asignaturaId]);
 }
 
+const updateClaseByProfesorId = (profesorId, clase) => {
+    return db.query('UPDATE profesores_asignaturas SET clase=? WHERE profesor_id=?', [clase, profesorId]);
+}
+
 const deleteByAsignaturaAndProfesorId = (profesorId, asignaturaId) => {
     return db.query('DELETE FROM profesores_asignaturas WHERE profesor_id=? AND asignatura_id=?', [profesorId, asignaturaId]);
 }
 
 module.exports = {
-    getAsiganturasByProfesorId, getByAsignaturaAndProfesorId, getClasesActivasByProfesorId, getClasesActivas, create, updateClase, deleteByAsignaturaAndProfesorId
+    getAsiganturasByProfesorId, getByAsignaturaAndProfesorId, getClasesActivasByProfesorId, getClasesActivas, create, updateClase, updateClaseByProfesorId, deleteByAsignaturaAndProfesorId
 }

@@ -1,7 +1,7 @@
 const dayjs = require('dayjs');
 const jwt = require('jsonwebtoken');
 const NodeGeocoder = require('node-geocoder');
-const { getMediaPuntuacion, getAsignaturasByAlumnoAndProfesor } = require('../models/clase.model');
+const { getMediaPuntuacion, getAsignaturasByAlumnoAndProfesor, getOpinionMaxPuntuacion } = require('../models/clase.model');
 const { getByUsuarioId } = require('../models/profesor.model');
 const { getAlumnosByProfesorID } = require('../models/usuario.model');
 const { getAsiganturasByProfesorId } = require('../models/profesor_asignatura.model');
@@ -41,6 +41,11 @@ const addAsignaturasValoracionAProfesores = async (profesores) => {
             const [puntuacion] = await getMediaPuntuacion(profesor.id);
             const media = puntuacion[0].media;
             profesor.puntuacion = (!media) ? 'No valorado' : media;
+
+            const [opinion] = await getOpinionMaxPuntuacion(profesor.id);
+            const mejorOpinion = opinion[0];
+            profesor.opinion = (!mejorOpinion || !mejorOpinion.opinion) ? 'No hay opiniones' : mejorOpinion.opinion;
+
             const [asignaturas] = await getAsiganturasByProfesorId(profesor.id);
             profesor.asignaturas = asignaturas;
         }

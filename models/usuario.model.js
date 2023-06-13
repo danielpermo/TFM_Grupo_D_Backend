@@ -18,16 +18,16 @@ const getAlumnosByProfesorID = (profesorId) => {
         'SELECT u.* FROM clases AS c, usuarios AS u WHERE profesor_id = ? AND u.id=c.alumno_id AND u.borrado=0 GROUP BY c.alumno_id', [profesorId]);
 }
 
-const create = ({ nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, edad, fecha_nacimiento, genero, dni, rol }) => {
+const create = ({ nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, imagen, edad, fecha_nacimiento, genero, dni, rol }) => {
     return db.query(
-        'INSERT INTO usuarios (nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, edad, fecha_nacimiento, genero, dni, rol) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-        [nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, edad, fecha_nacimiento, genero, dni, rol]);
+        'INSERT INTO usuarios (nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, imagen, edad, fecha_nacimiento, genero, dni, rol) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        [nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, imagen, edad, fecha_nacimiento, genero, dni, rol]);
 }
 
-const update = (usuarioId, { nombre, apellidos, username, email, telefono, direccion, ciudad, latitud, longitud, edad, fecha_nacimiento, genero, dni, rol }) => {
+const update = (usuarioId, { nombre, apellidos, username, email, telefono, direccion, ciudad, latitud, longitud, imagen, edad, fecha_nacimiento, genero, dni, rol }) => {
     return db.query(
-        'UPDATE usuarios SET nombre=?, apellidos=?, username=?, email=?, telefono=?, direccion=?, ciudad=?, latitud=?, longitud=?, edad=?, fecha_nacimiento=?, genero=?, dni=?, rol=? WHERE id=?',
-        [nombre, apellidos, username, email, telefono, direccion, ciudad, latitud, longitud, edad, fecha_nacimiento, genero, dni, rol, usuarioId]
+        'UPDATE usuarios SET nombre=?, apellidos=?, username=?, email=?, telefono=?, direccion=?, ciudad=?, latitud=?, longitud=?, imagen=?, edad=?, fecha_nacimiento=?, genero=?, dni=?, rol=? WHERE id=?',
+        [nombre, apellidos, username, email, telefono, direccion, ciudad, latitud, longitud, imagen, edad, fecha_nacimiento, genero, dni, rol, usuarioId]
     );
 }
 

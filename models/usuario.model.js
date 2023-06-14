@@ -13,9 +13,12 @@ const getByEmail = (email) => {
     return db.query('SELECT * FROM usuarios WHERE email=? AND borrado=0', [email]);
 }
 
-const getAlumnosByProfesorID = (profesorId) => {
-    return db.query(
-        'SELECT u.* FROM clases AS c, usuarios AS u WHERE profesor_id = ? AND u.id=c.alumno_id AND u.borrado=0 GROUP BY c.alumno_id', [profesorId]);
+const getAlumnosByProfesorID = (profesorId) => { //obtener los alumnos de un profesor
+    return db.query('SELECT u.* FROM clases AS c, usuarios AS u WHERE c.profesor_id = ? AND u.id=c.alumno_id AND u.borrado=0 GROUP BY c.alumno_id', [profesorId]);
+}
+
+const getAlumnosByProfesorAsignaturaId = (profesorId, asignaturaId) => { //obtener alumnos por profesorId y asignaturaId
+    return db.query('SELECT u.*, c.puntuacion, c.opinion FROM clases AS c, usuarios AS u WHERE c.profesor_id = ? AND c.asignatura_id=? AND u.id=c.alumno_id AND u.borrado=0;', [profesorId, asignaturaId]);
 }
 
 const create = ({ nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, imagen, edad, fecha_nacimiento, genero, dni, rol }) => {
@@ -37,5 +40,5 @@ const deleteById = (usuarioId, { borrado }) => {
 }
 
 module.exports = {
-    create, getById, getByEmail, getByRol, getAlumnosByProfesorID, update, deleteById
+    create, getById, getByEmail, getByRol, getAlumnosByProfesorID, getAlumnosByProfesorAsignaturaId, update, deleteById
 }

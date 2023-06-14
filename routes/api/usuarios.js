@@ -25,7 +25,7 @@ router.post('/registro', async (req, res) => {
         if (req.body.rol !== "profe") {
             return res.json(usuario);
         }
-        console.log(usuario.id, req.body);
+
         //Si el rol es profe añadir registro a tabla profesor
         const [resultProfe] = await createProfe(usuario.id, req.body);
         const [profeArr] = await getProfeByUsuarioId(usuario.id, false);

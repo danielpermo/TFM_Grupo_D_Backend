@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const { update: updateProfesor } = require('../../models/profesor.model');
 const { updateClase, getByAsignaturaAndProfesorId, create: createAsignaturaByProfesorId, deleteByAsignaturaAndProfesorId, getClasesActivasByProfesorId, updateClaseByProfesorId } = require('../../models/profesor_asignatura.model');
-const { update: updateUsuario, getById: getByUsuarioId, deleteById: deleteByUsuarioId } = require('../../models/usuario.model');
+const { update: updateUsuario, getById: getByUsuarioId, deleteById: deleteByUsuarioId, getAlumnosByProfesorAsignaturaId } = require('../../models/usuario.model');
 const { deleteByAlumno, finalizarClasesProfesor } = require('../../models/clase.model');
 const { getCoordenadas, getProfesorAndClases, getAlumnosWhithClasesByProfesorId } = require('../../utils/helpers');
 const { deleteByPrAs } = require('../../models/clase.model');
@@ -12,6 +12,17 @@ router.get('/alumnos/', async (req, res) => {
 
     try {
         const alumnos = await getAlumnosWhithClasesByProfesorId(usuarioId);
+        res.json(alumnos);
+    } catch (error) {
+        res.status(503).json({ Error: error.message });
+    }
+})
+
+router.get('/alumnos/:asignaturaId', async (req, res) => {
+    const { asignaturaId } = req.params;
+    const usuarioId = req.usuario.id;
+    try {
+        const [alumnos] = await getAlumnosByProfesorAsignaturaId(usuarioId, asignaturaId);
         res.json(alumnos);
     } catch (error) {
         res.status(503).json({ Error: error.message });
@@ -84,7 +95,6 @@ router.delete('/perfil', async (req, res) => {
         if (clases.length > 0) {
             const [asignaturas] = await updateClaseByProfesorId(usuarioId, 0)
             const [result] = await finalizarClasesProfesor(usuarioId);
-            console.log(asignaturas, result);
         }
         delete req.usuario.password;
         req.usuario.borrado = 1;

@@ -1,4 +1,4 @@
-const { getAll, getById, deleteById, getByNombre, getByEmail } = require('../../models/alumno.model');
+const { getAll, getById, deleteById, getByNombre, getByEmail, update } = require('../../models/alumno.model');
 const { getAsignaturasByAlumnoid, createClaseAlumno } = require('../../models/clase.model');
 const { getClasesActivas } = require('../../models/profesor_asignatura.model');
 
@@ -22,7 +22,7 @@ router.get('/clases', async (req, res) => {
         console.log(req.usuario.id);
         const [asignaturasAlumno] = await getAsignaturasByAlumnoid(req.usuario.id);
 
-        const result = asignaturasActivas.filter(asignatura1 => {return asignaturasAlumno.some(asignatura2 => asignatura1.asignatura_id === asignatura2.id)})
+        const result = asignaturasActivas.filter(asignatura1 => { return asignaturasAlumno.some(asignatura2 => asignatura1.asignatura_id === asignatura2.id) })
 
 
         res.json(result);

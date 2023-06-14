@@ -33,10 +33,10 @@ const create = ({nombre, apellidos, username, email, password, telefono, direcci
 )};
 */
 
-const update = (alumnoId, { nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, edad, fecha_nacimiento, genero, dni, fecha_alta, rol, borrado }) => {
+const update = (alumnoId, { nombre, apellidos, username, email, imagen, password, telefono, direccion, ciudad, edad, genero, dni }) => {
     return db.query(
-        'update usuarios set nombre = ?, apellidos = ?, username = ?, email = ?, password = ?, telefono = ?, direccion = ?, ciudad = ?, latitud = ?, longitud = ?, edad = ?, fecha_nacimiento = ?, genero = ?, dni = ?, fecha_alta = ?, rol = ?, borrado = ? where id = ?',
-        [nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, edad, fecha_nacimiento, genero, dni, fecha_alta, rol, borrado, alumnoId]
+        'update usuarios set nombre = ?, apellidos = ?, username = ?, email = ?, imagen = ?, password = ?, telefono = ?, direccion = ?, ciudad = ?, edad = ?, genero = ?, dni = ? where id = ?',
+        [nombre, apellidos, username, email, imagen, password, telefono, direccion, ciudad, edad, genero, dni, alumnoId]
     )
 }
 

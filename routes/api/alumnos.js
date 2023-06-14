@@ -77,7 +77,6 @@ router.get('/nombre', async (req, res) => {
 
 router.get('/:alumnoId', async (req, res) => {
 
-    console.log('hola');
     const { alumnoId } = req.params;
     try {
         const alumno = await getById(alumnoId);

@@ -1,0 +1,64 @@
+@host = http://localhost:3000
+
+GET {{host}}/api/clases/opinion/2
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo1LCJ1c3VhcmlvX3JvbCI6InByb2ZlIiwiZXhwIjoxNjg2Njc4ODYzLCJpYXQiOjE2ODY1OTI0NjN9.W80B39pHt86yy_dFJGhaWCQeiHPpCC_vBVuIt037Nxc
+
+
+###
+
+POST  {{host}}/api/usuarios/login
+Content-Type: application/json
+
+{
+    "email": "anagarcia@example.com",
+    "password": "hola"
+}
+
+###
+
+POST  {{host}}/api/usuarios/registro
+Content-Type: application/json
+
+{
+    "nombre": "Benjamin", 
+    "apellidos": "Luzon",
+    "username": "Nezarlc",
+    "telefono": 608561642,
+    "dni": "77024991Z",
+    "rol": "profe",
+    "direccion": "Calle sur",
+    "ciudad": "Granada",
+    "edad": 22,
+    "fecha_nacimiento": "2023-05-11",
+    "genero": "m",
+    "email": "benjaluzon03@gmail.com",
+    "password": "hola",
+    "experiencia": 3,
+    "precio": 4
+}
+
+###
+
+GET {{host}}/api/alumnos/clasesActivas
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoxMCwidXN1YXJpb19yb2wiOiJhbHVtIiwiZXhwIjoxNjg2NDk1MTQwLCJpYXQiOjE2ODY0MDg3NDB9.M5XBc-1EzG4jW--j1WOGMZJSDdGu6_-dQBIPBSaO6BE
+
+
+###
+
+GET {{host}}/api/alumnos/clases
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoxMSwidXN1YXJpb19yb2wiOiJhbHVtIiwiZXhwIjoxNjg2NDk4MzA0LCJpYXQiOjE2ODY0MTE5MDR9.Xs1jeGMOr-sOY3KuFoWZhu38MogLT3cvwpKxyUWZHKE
+
+###
+
+PUT {{host}}/api/clases/claseProfesorAlumno
+Content-Type: application/json
+
+{
+    "profesor_id": "2",
+    "asignatura_id": "2",
+    "alumno_id": "8"
+}
+
+### 
+
+DELETE {{host}}/api/clases/9

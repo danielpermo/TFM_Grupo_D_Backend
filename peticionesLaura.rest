@@ -1,0 +1,202 @@
+@host=http://localhost:3000
+
+GET https://teachersapp.onrender.com/api/publica
+
+### PARTE PUBLICA
+### listado profesores parte publica
+GET http://localhost:3000/api/publica
+
+### profesores de una ciudad
+GET http://localhost:3000/api/publica/ciudad/madrid
+
+### profesores que enseñan una asignatura
+GET http://localhost:3000/api/publica/asignatura/1
+
+### profesores de una ciudad que dan una asignatura
+GET http://localhost:3000/api/publica/ciudad/asignatura
+Content-Type: application/json
+
+{
+    "ciudad": "Valencia",
+    "asignaturaId": "6"
+}
+
+### USUARIOS
+### Registro alumno
+POST {{host}}/api/usuarios/registro
+Content-Type: application/json
+
+{
+"nombre": "Lucia",
+"apellidos": "Martinez Peña",
+"username":"luma",
+"email":"lucia@gmail.com",
+"password": "12345",
+"telefono":"678543520",
+"direccion":"Calle de Antonio López,22",
+"ciudad": "Madrid",
+"edad": 40,
+"genero": "f",
+"dni":"16273895p",
+"rol": "alum"
+}
+
+### Registro profesor
+POST https://teachersapp.onrender.com/api/usuarios/registro
+Content-Type: application/json
+
+{
+"nombre": "Antonio",
+"apellidos": "Higueras",
+"username":"anhi",
+"email":"antonio@gmail.com",
+"password": "12345",
+"telefono":"284765398",
+"direccion":"Calle Santander, 5",
+"ciudad": "Zaragoza",
+"imagen": "https://xsgames.co/randomusers/assets/avatars/male/27.jpg",
+"edad": 27,
+"genero": "m",
+"dni":"27648653t",
+"rol": "profe",
+"experiencia":5,
+"precio":7,
+"asignaturas":[9]
+}
+
+###  LOGIN admin
+POST http://localhost:3000/api/usuarios/login
+Content-Type: application/json
+
+{
+"email":"admin@gmail.com",
+"password": "12345"
+}
+
+###  LOGIN profe
+POST http://localhost:3000/api/usuarios/login
+Content-Type: application/json
+
+{
+"email":"gonzalo@gmail.com",
+"password": "12345"
+}
+
+###  LOGIN alum
+POST http://localhost:3000/api/usuarios/login
+Content-Type: application/json
+
+{
+"email":"marcelino@gmail.com",
+"password": "12345"
+}
+
+### ADMINISTRADORES 
+### listado de alumnos o profesores en funcion del rol profe o alum
+GET http://localhost:3000/api/administradores/listado/profe
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyOCwidXN1YXJpb19yb2wiOiJhZG1pbiIsImV4cCI6MTY4NzA3NDg0MSwiaWF0IjoxNjg2OTg4NDQxfQ.Fqeuavg_axh0zjjI58ocaNBYDXNv7XV_3XzDpzkbg3I
+
+### obtener información de usuario
+GET http://localhost:3000/api/administradores/24 
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyOCwidXN1YXJpb19yb2wiOiJhZG1pbiIsImV4cCI6MTY4NzA3NDg0MSwiaWF0IjoxNjg2OTg4NDQxfQ.Fqeuavg_axh0zjjI58ocaNBYDXNv7XV_3XzDpzkbg3I
+
+### Validar (1) o quitar validación (0) a profesor
+PATCH https://teachersapp.onrender.com/api/administradores/18
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyOCwidXN1YXJpb19yb2wiOiJhZG1pbiIsImV4cCI6MTY4NzAyNTQ4MywiaWF0IjoxNjg2OTM5MDgzfQ.pkpu403El6-D9GaMwH2IbZflI2_son3EWFLa1un64T8
+
+{
+    "validado": 1
+}
+
+### Borrado logico de usuario
+DELETE {{host}}/api/administradores/18
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyOCwidXN1YXJpb19yb2wiOiJhZG1pbiIsImV4cCI6MTY4NTcwMDQ5OSwiaWF0IjoxNjg1NjE0MDk5fQ.vyVzuSNAMw1q0SGZbCFoyWNBL-lOub2zTo9YvzHfwC8
+
+{
+    "borrado": 0
+}
+
+###PROFESORES
+###listado alumnos
+GET https://teachersapp.onrender.com/api/profesores/alumnos/
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyNCwidXN1YXJpb19yb2wiOiJwcm9mZSIsImV4cCI6MTY4NzAyMzY3MSwiaWF0IjoxNjg2OTM3MjcxfQ.XWtCa5reJYxFcJL9IcZYLGthZDAfleaIPJi04SR9KUw
+
+### listado de alumnos por asignatura
+GET http://localhost:3000/api/profesores/clases/1
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyNCwidXN1YXJpb19yb2wiOiJwcm9mZSIsImV4cCI6MTY4NzAyMzY3MSwiaWF0IjoxNjg2OTM3MjcxfQ.XWtCa5reJYxFcJL9IcZYLGthZDAfleaIPJi04SR9KUw
+
+### obtener alumno po id
+GET http://localhost:3000/api/profesores/alumnos/88
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyNCwidXN1YXJpb19yb2wiOiJwcm9mZSIsImV4cCI6MTY4NzA3NTQyNSwiaWF0IjoxNjg2OTg5MDI1fQ.RwYsJ8B8wQYNmTHB4UMTTM_vVwz12TVgoPcTbAy60rk
+
+### perfil
+GET http://localhost:3000/api/profesores/perfil
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyNCwidXN1YXJpb19yb2wiOiJwcm9mZSIsImV4cCI6MTY4Njg0MDAzNCwiaWF0IjoxNjg2NzUzNjM0fQ.ArNm5W0Y9klfzMjXlsq7yD8v2zz7nx-zCC8WBK1PnTQ
+
+### modificar datos profesor
+PUT http://localhost:3000/api/profesores/
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyNCwidXN1YXJpb19yb2wiOiJwcm9mZSIsImV4cCI6MTY4Njg0MDAzNCwiaWF0IjoxNjg2NzUzNjM0fQ.ArNm5W0Y9klfzMjXlsq7yD8v2zz7nx-zCC8WBK1PnTQ
+
+{
+  "nombre": "Gonzalo",
+  "apellidos": "Gonzalez Gonzalez",
+  "username": "gongos",
+  "email": "gonzalo@gmail.com",
+  "telefono": "123456789",
+  "direccion": "Avenida de Aragón",
+  "ciudad": "Valencia",
+  "imagen": "https://xsgames.co/randomusers/assets/avatars/male/24.jpg",
+  "edad": 35,
+  "genero": "m",
+  "dni": "87476545a",
+  "rol": "profe",
+  "experiencia": 3,
+  "precio": "23.00"
+}
+
+### Crear nueva asignatura para ese profesor
+POST http://localhost:3000/api/profesores/asignaturas/4
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyNCwidXN1YXJpb19yb2wiOiJwcm9mZSIsImV4cCI6MTY4Njc1MTM1MiwiaWF0IjoxNjg2NjY0OTUyfQ.1czzwon1MGLG0UyjsK0CFE0AKPUhNm7ij1wOCoTXd-Y
+
+### crear una clase para la asignatura
+PATCH http://localhost:3000/api/profesores/clases/4
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyNCwidXN1YXJpb19yb2wiOiJwcm9mZSIsImV4cCI6MTY4Njc1MTM1MiwiaWF0IjoxNjg2NjY0OTUyfQ.1czzwon1MGLG0UyjsK0CFE0AKPUhNm7ij1wOCoTXd-Y
+
+{
+    "clase": 1
+}
+
+### Finalizar clase para un alumno
+DELETE http://localhost:3000/api/profesores/alumnos/88
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyNCwidXN1YXJpb19yb2wiOiJwcm9mZSIsImV4cCI6MTY4Njc1MTM1MiwiaWF0IjoxNjg2NjY0OTUyfQ.1czzwon1MGLG0UyjsK0CFE0AKPUhNm7ij1wOCoTXd-Y
+
+{
+    "asignatura_id": 4
+}
+
+### finalizar clase de profesor y asignatura y para todos los alumnos
+DELETE http://localhost:3000/api/profesores/clases/4
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyNCwidXN1YXJpb19yb2wiOiJwcm9mZSIsImV4cCI6MTY4Njc1MTM1MiwiaWF0IjoxNjg2NjY0OTUyfQ.1czzwon1MGLG0UyjsK0CFE0AKPUhNm7ij1wOCoTXd-Y
+
+{
+    "clase": 0
+}
+
+###Eliminar asignatura a profesor
+DELETE http://localhost:3000/api/profesores/asignaturas/4
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyNCwidXN1YXJpb19yb2wiOiJwcm9mZSIsImV4cCI6MTY4Njc1MTM1MiwiaWF0IjoxNjg2NjY0OTUyfQ.1czzwon1MGLG0UyjsK0CFE0AKPUhNm7ij1wOCoTXd-Y
+
+###Eliminar profesor
+DELETE http://localhost:3000/api/profesores/perfil
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoyNCwidXN1YXJpb19yb2wiOiJwcm9mZSIsImV4cCI6MTY4Njc1MTM1MiwiaWF0IjoxNjg2NjY0OTUyfQ.1czzwon1MGLG0UyjsK0CFE0AKPUhNm7ij1wOCoTXd-Y
+
+{
+    "borrado": 0
+}

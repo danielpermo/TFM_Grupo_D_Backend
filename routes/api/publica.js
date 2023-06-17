@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { getProfesoresPublic, getByCiudad, getByAsignatura } = require('../../models/profesor.model');
+const { getProfesoresPublic, getByCiudad, getByAsignatura, getByCiudadAndAsignatura } = require('../../models/profesor.model');
 const { addAsignaturasValoracionAProfesores } = require('../../utils/helpers');
 
 router.get('/', async (req, res) => {
@@ -12,6 +12,23 @@ router.get('/', async (req, res) => {
         }
 
         const profesores = await addAsignaturasValoracionAProfesores(usuarios);
+        res.json(profesores);
+    } catch (error) {
+        res.status(503).json({ Error: error.message });
+    }
+});
+
+router.get('/ciudad/asignatura/', async (req, res) => {
+    const { ciudad } = req.body;
+    const { asignaturaId } = req.body;
+
+    try {
+        const [usuarios] = await getByCiudadAndAsignatura(ciudad, asignaturaId);
+        if (usuarios.length === 0) {
+            return res.json('No se han encontrado profesores');
+        }
+
+        const profesores = await addAsignaturasValoracionAProfesores(usuarios)
         res.json(profesores);
     } catch (error) {
         res.status(503).json({ Error: error.message });

@@ -17,9 +17,14 @@ const getAlumnosByProfesorID = (profesorId) => { //obtener los alumnos de un pro
     return db.query('SELECT u.* FROM clases AS c, usuarios AS u WHERE c.profesor_id = ? AND u.id=c.alumno_id AND u.borrado=0 GROUP BY c.alumno_id', [profesorId]);
 }
 
+const getAlumnoByIdAndProfesorId = (profesorId, alumnoId) => { //obtener un alumno de un profesor,lo limito a 1 por si tiene varias clases con ese profesor
+    return db.query('SELECT u.* FROM clases AS c, usuarios AS u WHERE c.profesor_id = ? AND c.alumno_id=? AND u.id=c.alumno_id AND u.borrado=0 LIMIT 1', [profesorId, alumnoId]);
+}
+
 const getAlumnosByProfesorAsignaturaId = (profesorId, asignaturaId) => { //obtener alumnos por profesorId y asignaturaId
     return db.query('SELECT u.*, c.puntuacion, c.opinion FROM clases AS c, usuarios AS u WHERE c.profesor_id = ? AND c.asignatura_id=? AND u.id=c.alumno_id AND u.borrado=0;', [profesorId, asignaturaId]);
 }
+
 
 const create = ({ nombre, apellidos, username, email, password, telefono, direccion, ciudad, latitud, longitud, imagen, edad, fecha_nacimiento, genero, dni, rol }) => {
     return db.query(
@@ -40,5 +45,5 @@ const deleteById = (usuarioId, { borrado }) => {
 }
 
 module.exports = {
-    create, getById, getByEmail, getByRol, getAlumnosByProfesorID, getAlumnosByProfesorAsignaturaId, update, deleteById
+    create, getById, getByEmail, getByRol, getAlumnosByProfesorID, getAlumnoByIdAndProfesorId, getAlumnosByProfesorAsignaturaId, update, deleteById
 }

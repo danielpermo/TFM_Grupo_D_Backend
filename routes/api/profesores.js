@@ -2,8 +2,8 @@ const router = require('express').Router();
 
 const { update: updateProfesor } = require('../../models/profesor.model');
 const { updateClase, getByAsignaturaAndProfesorId, create: createAsignaturaByProfesorId, deleteByAsignaturaAndProfesorId, getClasesActivasByProfesorId, updateClaseByProfesorId } = require('../../models/profesor_asignatura.model');
-const { update: updateUsuario, getById: getByUsuarioId, deleteById: deleteByUsuarioId, getAlumnosByProfesorAsignaturaId } = require('../../models/usuario.model');
-const { deleteByAlumno, finalizarClasesProfesor } = require('../../models/clase.model');
+const { update: updateUsuario, getById: getByUsuarioId, deleteById: deleteByUsuarioId, getAlumnosByProfesorAsignaturaId, getAlumnoByIdAndProfesorId } = require('../../models/usuario.model');
+const { deleteByAlumno, finalizarClasesProfesor, getAsignaturasByAlumnoAndProfesor } = require('../../models/clase.model');
 const { getCoordenadas, getProfesorAndClases, getAlumnosWhithClasesByProfesorId } = require('../../utils/helpers');
 const { deleteByPrAs } = require('../../models/clase.model');
 
@@ -18,7 +18,27 @@ router.get('/alumnos/', async (req, res) => {
     }
 })
 
-router.get('/alumnos/:asignaturaId', async (req, res) => {
+router.get('/alumnos/:alumnoId', async (req, res) => {//obtener información de un alumno
+    const { alumnoId } = req.params;
+    const usuarioId = req.usuario.id;
+
+    try {
+        const [result] = await getAlumnoByIdAndProfesorId(usuarioId, alumnoId);
+
+        if (result.length === 0) {
+            return res.json('No tienes ese alumno');
+        }
+
+        const alumno = result[0];
+        const [asignaturas] = await getAsignaturasByAlumnoAndProfesor(alumnoId, usuarioId);
+        alumno.asignaturas = asignaturas;
+        res.json(alumno);
+    } catch (error) {
+        res.status(503).json({ Error: error.message });
+    }
+})
+
+router.get('/clases/:asignaturaId', async (req, res) => { //listado de alumnos de una clase, por asignatura
     const { asignaturaId } = req.params;
     const usuarioId = req.usuario.id;
     try {
@@ -120,7 +140,7 @@ router.delete('/perfil', async (req, res) => {
 
     });
 
-router.delete('/clases/:asignaturaId', async (req, res) => {//finalizar clase de profesor y asignatura y para todos los alumnos
+router.delete('/clases/:asignaturaId', async (req, res) => {//finalizar clase de profesor y asignatura y también para todos los alumnos
     const { asignaturaId } = req.params;
     const usuarioId = req.usuario.id;
 

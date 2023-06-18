@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 router.get('/clases', async (req, res) => {
     try {
         const [asignaturasActivas] = await getClasesActivas();
-        console.log(req.usuario.id);
+
         const [asignaturasAlumno] = await getAsignaturasByAlumnoid(req.usuario.id);
 
         const result = asignaturasActivas.filter(asignatura1 => { return asignaturasAlumno.some(asignatura2 => asignatura1.asignatura_id === asignatura2.id) })
@@ -104,7 +104,6 @@ router.get('/profesores', async (req, res) => {
             index === self.findIndex((o) => o.id === objeto.id)
         );
         
-        console.log(resultado);
         res.json(resultado);
 
     } catch (error) {

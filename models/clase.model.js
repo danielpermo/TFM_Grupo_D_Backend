@@ -66,8 +66,12 @@ const finalizarClasesProfesor = (profesor_Id) => {
     return db.query('UPDATE clases SET finalizado = 1 where profesor_id = ?', [profesor_Id]);
 }
 
+const updateOpinionValoracion = ({profesor_Id, alumno_Id, asignatura_Id, opinion, puntuacion}) => {
+    return db.query('UPDATE clases SET opinion = ?, puntuacion = ? = 1 where profesor_id = ? and alumno_Id = ? and asignatura_Id = ?', [opinion, puntuacion, asignatura_Id, alumno_Id, profesor_Id]);
+}
+
 module.exports = {
     getAll, getAllByProfesorId, getAsignaturasByAlumnoAndProfesor, getMediaPuntuacion, create, getById,
     deleteById, deleteByPrAs, deleteByAlumno, getByPrAlAs, getAsignaturasByAlumnoid, createClaseAlumno,
-    getOpinionMaxPuntuacion, finalizarClasesProfesor
+    getOpinionMaxPuntuacion, finalizarClasesProfesor, updateOpinionValoracion
 }

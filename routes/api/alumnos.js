@@ -1,5 +1,5 @@
 const { getAll, getById, deleteById, getByNombre, getByEmail, update } = require('../../models/alumno.model');
-const { getAsignaturasByAlumnoid, createClaseAlumno } = require('../../models/clase.model');
+const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion,getById } = require('../../models/clase.model');
 const { getClasesActivas } = require('../../models/profesor_asignatura.model');
 
 const router = require('express').Router();
@@ -93,6 +93,18 @@ router.get('/:alumnoId', async (req, res) => {
     }
 });
 
+router.put('/ActualizarCase', async (req, res) => {
+
+    try {
+        await updateOpinionValoracion(req.body);
+        res.json("Actualizado correctamente");
+
+    } catch (error) {
+        res.status(500).json({ fatal: error.message });
+    }
+})
+
+
 router.put('/:alumnoId', async (req, res) => {
     try {
         const { alumnoId } = req.params;
@@ -104,6 +116,7 @@ router.put('/:alumnoId', async (req, res) => {
         res.status(500).json({ fatal: error.message });
     }
 })
+
 
 router.post('/NuevaClase', async (req, res) => {
     try {

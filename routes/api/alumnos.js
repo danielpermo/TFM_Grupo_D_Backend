@@ -1,6 +1,6 @@
 const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion } = require('../../models/clase.model');
+const { getProfesorByUsuarioId, getByUsuarioId } = require('../../models/profesor.model');
 const { getAll, getById, deleteById, getByNombre, getByEmail, update, getProfesorById } = require('../../models/alumno.model');
-const { getProfesorByUsuarioId } = require('../../models/profesor.model');
 const { getClasesActivas } = require('../../models/profesor_asignatura.model');
 
 
@@ -90,7 +90,12 @@ router.get('/profesores', async (req, res) => {
             const [res] = await getProfesorById(alumno[i].profesor_id);
 
             const [res2] = await getProfesorByUsuarioId(res[0].usuario_id);
- 
+
+            const [res3] = await getByUsuarioId(res[0].usuario_id);
+
+            res2[0].precio = res3[0].precio;
+            res2[0].experiencia = res3[0].experiencia;
+            
             profesores.push(res2[0]);
 
         }
@@ -99,7 +104,7 @@ router.get('/profesores', async (req, res) => {
             index === self.findIndex((o) => o.id === objeto.id)
         );
         
-
+        console.log(resultado);
         res.json(resultado);
 
     } catch (error) {

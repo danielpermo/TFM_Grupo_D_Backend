@@ -1,6 +1,6 @@
-@host = http://localhost:3007
+@host = http://localhost:3000
 
-PUT {{host}}/api/alumnos/ActualizarClase
+GET  {{host}}/api/alumnos/profesores
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoxMSwidXN1YXJpb19yb2wiOiJhbHVtIiwiZXhwIjoxNjg3MjEyMDQ0LCJpYXQiOjE2ODcxMjU2NDR9.NTWsetQGlHk-S1zmm6szsEt1ilVbCBKfLtzNqUQu8es
 Content-Type: application/json
 
@@ -9,7 +9,7 @@ Content-Type: application/json
     "asignatura_id": 2,
     "alumno_id": 11,
     "puntuacion": 2,
-    "opinion": "Mala clase"
+    "opinion": "Muy mala clase"
 }
 
 ###

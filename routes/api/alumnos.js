@@ -1,5 +1,5 @@
 const { getAll, getById, deleteById, getByNombre, getByEmail, update, getProfesorById } = require('../../models/alumno.model');
-const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracionss } = require('../../models/clase.model');
+const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion } = require('../../models/clase.model');
 const { getProfesorByUsuarioId } = require('../../models/profesor.model');
 const { getClasesActivas } = require('../../models/profesor_asignatura.model');
 

@@ -127,7 +127,7 @@ router.get('/:alumnoId', async (req, res) => {
     }
 });
 
-router.put('/ActualizarCase', async (req, res) => {
+router.put('/ActualizarClase', async (req, res) => {
 
     try {
         await updateOpinionValoracion(req.body);

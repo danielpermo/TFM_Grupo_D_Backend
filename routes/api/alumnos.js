@@ -109,7 +109,7 @@ router.get('/profesores', async (req, res) => {
 
     } catch (error) {
 
-        res.json({ fatal: error.message })
+        res.status(503).json({ fatal: error.message })
     }
 
 });

@@ -1,6 +1,8 @@
-const { getAll, getById, deleteById, getByNombre, getByEmail, update } = require('../../models/alumno.model');
-const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion,getById } = require('../../models/clase.model');
+const { getAll, getById, deleteById, getByNombre, getByEmail, update, getProfesorById } = require('../../models/alumno.model');
+const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion } = require('../../models/clase.model');
+const { getProfesorByUsuarioId } = require('../../models/profesor.model');
 const { getClasesActivas } = require('../../models/profesor_asignatura.model');
+
 
 const router = require('express').Router();
 
@@ -15,6 +17,7 @@ router.get('/', async (req, res) => {
     }
 
 });
+
 
 router.get('/clases', async (req, res) => {
     try {
@@ -75,6 +78,37 @@ router.get('/nombre', async (req, res) => {
 
 });
 
+router.get('/profesores', async (req, res) => {
+
+    try {
+
+        const [alumno] = await getAsignaturasByAlumnoid(req.usuario.id);
+        var profesores = [];
+
+        for(var i = 0; i < alumno.length; i++){
+
+            const [res] = await getProfesorById(alumno[i].profesor_id);
+
+            const [res2] = await getProfesorByUsuarioId(res[0].usuario_id);
+ 
+            profesores.push(res2[0]);
+
+        }
+
+        var resultado = profesores.filter((objeto, index, self) =>
+            index === self.findIndex((o) => o.id === objeto.id)
+        );
+        
+
+        res.json(resultado);
+
+    } catch (error) {
+
+        res.json({ fatal: error.message })
+    }
+
+});
+
 router.get('/:alumnoId', async (req, res) => {
 
     const { alumnoId } = req.params;
@@ -93,7 +127,7 @@ router.get('/:alumnoId', async (req, res) => {
     }
 });
 
-router.put('/ActualizarCase', async (req, res) => {
+router.put('/ActualizarClase', async (req, res) => {
 
     try {
         await updateOpinionValoracion(req.body);

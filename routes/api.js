@@ -8,6 +8,6 @@ router.use('/asignaturas', require('./api/asignaturas'));
 router.use('/profesores', checkToken, checkProfe, require('./api/profesores'));
 router.use('/alumnos', checkToken, checkAlum, require('./api/alumnos'));
 router.use('/administradores', checkToken, checkAdmin, require('./api/administradores'))
-router.use('/clases', checkToken, require('./api/clases'));
+router.use('/clases', checkToken, checkAlum, require('./api/clases'));
 
 module.exports = router;

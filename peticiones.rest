@@ -1,7 +1,7 @@
-@host = http://localhost:3000
+@host = http://localhost:3007
 
-GET {{host}}/api/clases/opinion/2
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo1LCJ1c3VhcmlvX3JvbCI6InByb2ZlIiwiZXhwIjoxNjg2Njc4ODYzLCJpYXQiOjE2ODY1OTI0NjN9.W80B39pHt86yy_dFJGhaWCQeiHPpCC_vBVuIt037Nxc
+GET {{host}}/api/alumnos/profesores
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoxMSwidXN1YXJpb19yb2wiOiJhbHVtIiwiZXhwIjoxNjg3MjA5NDg5LCJpYXQiOjE2ODcxMjMwODl9.8CYmkgbtqusFOBRKiHdo5Fenkm2_6gv8tv6okeK5nNY
 
 
 ###
@@ -10,7 +10,7 @@ POST  {{host}}/api/usuarios/login
 Content-Type: application/json
 
 {
-    "email": "anagarcia@example.com",
+    "email": "benjaluzon01@gmail.com",
     "password": "hola"
 }
 

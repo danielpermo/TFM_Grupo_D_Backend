@@ -1,5 +1,5 @@
 const getProfesoresPublic = () => {
-    return db.query('SELECT u.id, u.nombre, u.apellidos, u.ciudad, p.experiencia, p.precio FROM usuarios AS u, profesores AS p WHERE u.rol="profe" AND u.id=p.usuario_id AND u.borrado=0 AND p.validado=1');
+    return db.query('SELECT u.id, u.nombre, u.apellidos, u.ciudad, u.imagen, p.experiencia, p.precio FROM usuarios AS u, profesores AS p WHERE u.rol="profe" AND u.id=p.usuario_id AND u.borrado=0 AND p.validado=1');
 }
 
 const getByUsuarioId = (usuarioId, validado = true) => {
@@ -13,11 +13,15 @@ const getProfesorByUsuarioId = (usuarioId, validado = true) => {
 }
 
 const getByCiudad = (ciudad) => {
-    return db.query('SELECT u.id, u.nombre, u.apellidos, u.ciudad, p.experiencia, p.precio FROM usuarios AS u, profesores AS p WHERE u.rol="profe" AND u.id=p.usuario_id AND u.borrado=0 AND p.validado=1 AND u.ciudad LIKE ?', [ciudad]);
+    return db.query('SELECT u.id, u.nombre, u.apellidos, u.ciudad, u.imagen, p.experiencia, p.precio FROM usuarios AS u, profesores AS p WHERE u.rol="profe" AND u.id=p.usuario_id AND u.borrado=0 AND p.validado=1 AND u.ciudad LIKE ?', [ciudad]);
 }
 
 const getByAsignatura = (asignaturaId) => {
-    return db.query('SELECT u.id, u.nombre, u.apellidos, u.ciudad, p.experiencia, p.precio FROM usuarios AS u, profesores AS p, profesores_asignaturas AS pa WHERE u.rol="profe" AND u.id=p.usuario_id AND u.borrado=0 AND p.validado=1 AND pa.profesor_id=u.id AND pa.asignatura_id=?', [asignaturaId]);
+    return db.query('SELECT u.id, u.nombre, u.apellidos, u.ciudad, u.imagen, p.experiencia, p.precio FROM usuarios AS u, profesores AS p, profesores_asignaturas AS pa WHERE u.rol="profe" AND u.id=p.usuario_id AND u.borrado=0 AND p.validado=1 AND pa.profesor_id=u.id AND pa.asignatura_id=?', [asignaturaId]);
+}
+
+const getByCiudadAndAsignatura = (ciudad, asignaturaId) => {
+    return db.query('SELECT u.id, u.nombre, u.apellidos, u.ciudad, u.imagen, p.experiencia, p.precio FROM usuarios AS u, profesores AS p, profesores_asignaturas AS pa WHERE u.rol="profe" AND u.borrado=0 AND p.validado=1 AND u.id=p.usuario_id AND pa.profesor_id=u.id AND u.ciudad=? AND pa.asignatura_id=?', [ciudad, asignaturaId]);
 }
 
 const create = (usuarioId, { experiencia, precio }) => {
@@ -32,5 +36,5 @@ const updateValidacion = (usuarioId, { validado }) => {
 }
 
 module.exports = {
-    getProfesoresPublic, getByUsuarioId, getProfesorByUsuarioId, getByCiudad, getByAsignatura, create, update, updateValidacion
+    getProfesoresPublic, getByUsuarioId, getProfesorByUsuarioId, getByCiudad, getByAsignatura, getByCiudadAndAsignatura, create, update, updateValidacion
 }

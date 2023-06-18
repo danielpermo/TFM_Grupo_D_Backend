@@ -1,9 +1,9 @@
 const router = require('express').Router();
 
 const { update: updateProfesor } = require('../../models/profesor.model');
-const { updateClase, getByAsignaturaAndProfesorId, create: createAsignaturaByProfesorId, deleteByAsignaturaAndProfesorId } = require('../../models/profesor_asignatura.model');
-const { update: updateUsuario, getById: getByUsuarioId } = require('../../models/usuario.model');
-const { deleteByAlumno } = require('../../models/clase.model');
+const { updateClase, getByAsignaturaAndProfesorId, create: createAsignaturaByProfesorId, deleteByAsignaturaAndProfesorId, getClasesActivasByProfesorId, updateClaseByProfesorId } = require('../../models/profesor_asignatura.model');
+const { update: updateUsuario, getById: getByUsuarioId, deleteById: deleteByUsuarioId, getAlumnosByProfesorAsignaturaId, getAlumnoByIdAndProfesorId } = require('../../models/usuario.model');
+const { deleteByAlumno, finalizarClasesProfesor, getAsignaturasByAlumnoAndProfesor } = require('../../models/clase.model');
 const { getCoordenadas, getProfesorAndClases, getAlumnosWhithClasesByProfesorId } = require('../../utils/helpers');
 const { deleteByPrAs } = require('../../models/clase.model');
 
@@ -12,6 +12,37 @@ router.get('/alumnos/', async (req, res) => {
 
     try {
         const alumnos = await getAlumnosWhithClasesByProfesorId(usuarioId);
+        res.json(alumnos);
+    } catch (error) {
+        res.status(503).json({ Error: error.message });
+    }
+})
+
+router.get('/alumnos/:alumnoId', async (req, res) => {//obtener información de un alumno
+    const { alumnoId } = req.params;
+    const usuarioId = req.usuario.id;
+
+    try {
+        const [result] = await getAlumnoByIdAndProfesorId(usuarioId, alumnoId);
+
+        if (result.length === 0) {
+            return res.json('No tienes ese alumno');
+        }
+
+        const alumno = result[0];
+        const [asignaturas] = await getAsignaturasByAlumnoAndProfesor(alumnoId, usuarioId);
+        alumno.asignaturas = asignaturas;
+        res.json(alumno);
+    } catch (error) {
+        res.status(503).json({ Error: error.message });
+    }
+})
+
+router.get('/clases/:asignaturaId', async (req, res) => { //listado de alumnos de una clase, por asignatura
+    const { asignaturaId } = req.params;
+    const usuarioId = req.usuario.id;
+    try {
+        const [alumnos] = await getAlumnosByProfesorAsignaturaId(usuarioId, asignaturaId);
         res.json(alumnos);
     } catch (error) {
         res.status(503).json({ Error: error.message });
@@ -74,22 +105,42 @@ router.post('/asignaturas/:asignaturaId', async (req, res) => {//Crear nueva asi
     }
 });
 
-router.delete('/alumnos/:alumnoId', async (req, res) => {//Finalizar clase para un alumno
-    const { alumnoId } = req.params;
+router.delete('/perfil', async (req, res) => {
     const usuarioId = req.usuario.id;
-    const { asignatura_id } = req.body;
+
     try {
-        const [result] = await deleteByAlumno(usuarioId, asignatura_id, alumnoId);
+        await deleteByUsuarioId(usuarioId, req.body);
+        const [clases] = await getClasesActivasByProfesorId(usuarioId);
 
-        const alumnos = await getAlumnosWhithClasesByProfesorId(usuarioId)
-        res.json(alumnos);
+        if (clases.length > 0) {
+            const [asignaturas] = await updateClaseByProfesorId(usuarioId, 0)
+            const [result] = await finalizarClasesProfesor(usuarioId);
+        }
+        delete req.usuario.password;
+        req.usuario.borrado = 1;
+        res.json(req.usuario);
     } catch (error) {
-        res.status(503).json({ Error: error.message });
+        res.status(503).json({ Error: error.message })
     }
+}),
 
-});
+    router.delete('/alumnos/:alumnoId', async (req, res) => {//Finalizar clase para un alumno
+        const { alumnoId } = req.params;
+        const usuarioId = req.usuario.id;
+        const { asignatura_id } = req.body;
+        try {
+            const [result] = await deleteByAlumno(usuarioId, asignatura_id, alumnoId);
 
-router.delete('/clases/:asignaturaId', async (req, res) => {//finalizar clase de profesor y asignatura y para todos los alumnos
+            const alumnos = await getAlumnosWhithClasesByProfesorId(usuarioId);
+
+            res.json(alumnos);
+        } catch (error) {
+            res.status(503).json({ Error: error.message });
+        }
+
+    });
+
+router.delete('/clases/:asignaturaId', async (req, res) => {//finalizar clase de profesor y asignatura y también para todos los alumnos
     const { asignaturaId } = req.params;
     const usuarioId = req.usuario.id;
 
@@ -127,6 +178,6 @@ router.delete('/asignaturas/:asignaturaId', async (req, res) => {//Eliminar asig
     } catch (error) {
         res.status(503).json({ Error: error.message });
     }
-})
+});
 
 module.exports = router;

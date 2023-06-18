@@ -10,6 +10,11 @@ const getById = (alumnoId) => {
     return db.query('select * from usuarios where id = ? and rol = ? and borrado = ?', [alumnoId, 'alum', 0]);
 }
 
+const getProfesorById = (profesorId) => {
+
+    return db.query('SELECT * from profesores where id = ?', [profesorId]);
+}
+
 const getByNombre = ({ nombre, apellido }) => {
 
     return db.query('select * from usuarios where nombre = ? and apellidos = ? and borrado = ?', [nombre, apellido, 0]);
@@ -42,6 +47,6 @@ const update = (alumnoId, { nombre, apellidos, username, email, imagen, password
 
 module.exports = {
 
-    getAll, getById, getByNombre, deleteById, update
+    getAll, getById, getByNombre, deleteById, update, getProfesorById
 }
 

@@ -1,5 +1,5 @@
 const { getAll, getById, deleteById, getByNombre, getByEmail, update } = require('../../models/alumno.model');
-const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion,getById } = require('../../models/clase.model');
+const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion } = require('../../models/clase.model');
 const { getClasesActivas } = require('../../models/profesor_asignatura.model');
 
 const router = require('express').Router();

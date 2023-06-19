@@ -12,7 +12,7 @@ const getById = (alumnoId) => {
 
 const getProfesorById = (profesorId) => {
 
-    return db.query('SELECT * from profesores where id = ?', [profesorId]);
+    return db.query('SELECT * from profesores where usuario_id = ?', [profesorId]);
 }
 
 const getByNombre = ({ nombre, apellido }) => {

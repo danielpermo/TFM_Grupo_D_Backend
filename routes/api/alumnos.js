@@ -1,6 +1,6 @@
-const { getAll, getById, deleteById, getByNombre, getByEmail, update, getProfesorById } = require('../../models/alumno.model');
 const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion } = require('../../models/clase.model');
 const { getProfesorByUsuarioId, getByUsuarioId } = require('../../models/profesor.model');
+const { getAll, getById, deleteById, getByNombre, getByEmail, update, getProfesorById } = require('../../models/alumno.model');
 const { getClasesActivas } = require('../../models/profesor_asignatura.model');
 
 
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 router.get('/clases', async (req, res) => {
     try {
         const [asignaturasActivas] = await getClasesActivas();
-        console.log(req.usuario.id);
+
         const [asignaturasAlumno] = await getAsignaturasByAlumnoid(req.usuario.id);
 
         const result = asignaturasActivas.filter(asignatura1 => { return asignaturasAlumno.some(asignatura2 => asignatura1.asignatura_id === asignatura2.id) })
@@ -71,7 +71,7 @@ router.get('/nombre', async (req, res) => {
 
         res.json(alumno[0]);
 
-    } catch (error) {
+    } catch (error) { 
 
         res.json({ fatal: error.message })
     }
@@ -87,11 +87,13 @@ router.get('/profesores', async (req, res) => {
 
         for(var i = 0; i < alumno.length; i++){
 
-            const [res] = await getProfesorById(alumno[i].profesor_id);
+            const [res4] = await getProfesorById(alumno[i].profesor_id);
 
-            const [res2] = await getProfesorByUsuarioId(res[0].usuario_id);
+            console.log(alumno[i].profesor_id);
 
-            const [res3] = await getByUsuarioId(res[0].usuario_id);
+            const [res2] = await getProfesorByUsuarioId(res4[0].usuario_id);
+
+            const [res3] = await getByUsuarioId(res4[0].usuario_id);
 
             res2[0].precio = res3[0].precio;
             res2[0].experiencia = res3[0].experiencia;
@@ -104,7 +106,6 @@ router.get('/profesores', async (req, res) => {
             index === self.findIndex((o) => o.id === objeto.id)
         );
         
-        console.log(resultado);
         res.json(resultado);
 
     } catch (error) {

@@ -1,7 +1,7 @@
 @host = http://localhost:3000
 
 GET  {{host}}/api/alumnos/profesores
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoxMSwidXN1YXJpb19yb2wiOiJhbHVtIiwiZXhwIjoxNjg3MjEyMDQ0LCJpYXQiOjE2ODcxMjU2NDR9.NTWsetQGlHk-S1zmm6szsEt1ilVbCBKfLtzNqUQu8es
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo5NiwidXN1YXJpb19yb2wiOiJhbHVtIiwiZXhwIjoxNjg3MjE5OTE3LCJpYXQiOjE2ODcxMzM1MTd9.5HUKgs4_--r3j_E-Wd_Bp8m0A0qSZQgUuM9OCUP0Nfw
 
 ###
 
@@ -9,8 +9,8 @@ POST  {{host}}/api/usuarios/login
 Content-Type: application/json
 
 {
-    "email": "benjaluzon01@gmail.com",
-    "password": "hola"
+    "email": "sara@gmail.com",
+    "password": "12345"
 }
 
 ###

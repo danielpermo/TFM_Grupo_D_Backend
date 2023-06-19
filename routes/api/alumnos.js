@@ -71,7 +71,7 @@ router.get('/nombre', async (req, res) => {
 
         res.json(alumno[0]);
 
-    } catch (error) {
+    } catch (error) { 
 
         res.json({ fatal: error.message })
     }
@@ -88,6 +88,8 @@ router.get('/profesores', async (req, res) => {
         for(var i = 0; i < alumno.length; i++){
 
             const [res4] = await getProfesorById(alumno[i].profesor_id);
+
+            console.log(alumno[i].profesor_id);
 
             const [res2] = await getProfesorByUsuarioId(res4[0].usuario_id);
 

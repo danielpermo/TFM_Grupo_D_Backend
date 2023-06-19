@@ -1,4 +1,4 @@
-const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion } = require('../../models/clase.model');
+const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion, getValoracionActualizada, getAsignaturasByAlumnoAndProfesor } = require('../../models/clase.model');
 const { getProfesorByUsuarioId, getByUsuarioId } = require('../../models/profesor.model');
 const { getAll, getById, deleteById, getByNombre, getByEmail, update, getProfesorById } = require('../../models/alumno.model');
 const { getClasesActivas } = require('../../models/profesor_asignatura.model');
@@ -137,7 +137,8 @@ router.put('/ActualizarClase', async (req, res) => {
 
     try {
         await updateOpinionValoracion(req.body);
-        res.json("Actualizado correctamente");
+        const [resultado] = await getAsignaturasByAlumnoAndProfesor(req.body.alumno_id, req.body.profesor_id);
+        res.json(resultado[0]);
 
     } catch (error) {
         res.status(500).json({ fatal: error.message });

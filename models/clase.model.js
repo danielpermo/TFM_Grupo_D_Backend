@@ -67,11 +67,15 @@ const finalizarClasesProfesor = (profesor_Id) => {
 }
 
 const updateOpinionValoracion = ({profesor_id, alumno_id, asignatura_id, opinion, puntuacion}) => {
-    return db.query('UPDATE clases SET opinion = ?, puntuacion = ? where profesor_id = ? and alumno_id = ? and asignatura_id = ?', [opinion, puntuacion, asignatura_id, alumno_id, profesor_id]);
+    return db.query('UPDATE clases SET opinion = ?, puntuacion = ? where profesor_id = ? and alumno_id = ? and asignatura_id = ?', [opinion, puntuacion, profesor_id, alumno_id, asignatura_id]);
+}
+
+const getValoracionActualizada = ({profesor_id, alumno_id, asignatura_id, opinion, puntuacion}) => {
+    return db.query('select * from clases where opinion = ? AND puntuacion = ? AND profesor_id = ? and alumno_id = ? and asignatura_id = ?', [opinion, puntuacion, asignatura_id, alumno_id, profesor_id]);
 }
 
 module.exports = {
     getAll, getAllByProfesorId, getAsignaturasByAlumnoAndProfesor, getMediaPuntuacion, create, getById,
     deleteById, deleteByPrAs, deleteByAlumno, getByPrAlAs, getAsignaturasByAlumnoid, createClaseAlumno,
-    getOpinionMaxPuntuacion, finalizarClasesProfesor, updateOpinionValoracion
+    getOpinionMaxPuntuacion, finalizarClasesProfesor, updateOpinionValoracion, getValoracionActualizada
 }

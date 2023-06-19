@@ -87,11 +87,11 @@ router.get('/profesores', async (req, res) => {
 
         for(var i = 0; i < alumno.length; i++){
 
-            const [res] = await getProfesorById(alumno[i].profesor_id);
+            const [res4] = await getProfesorById(alumno[i].profesor_id);
 
-            const [res2] = await getProfesorByUsuarioId(res[0].usuario_id);
+            const [res2] = await getProfesorByUsuarioId(res4[0].usuario_id);
 
-            const [res3] = await getByUsuarioId(res[0].usuario_id);
+            const [res3] = await getByUsuarioId(res4[0].usuario_id);
 
             res2[0].precio = res3[0].precio;
             res2[0].experiencia = res3[0].experiencia;

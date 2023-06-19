@@ -1,6 +1,6 @@
-const { getAll, getById, deleteById, getByNombre, getByEmail, update, getProfesorById } = require('../../models/alumno.model');
-const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion } = require('../../models/clase.model');
+const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion, getValoracionActualizada, getAsignaturasByAlumnoAndProfesor } = require('../../models/clase.model');
 const { getProfesorByUsuarioId, getByUsuarioId } = require('../../models/profesor.model');
+const { getAll, getById, deleteById, getByNombre, getByEmail, update, getProfesorById } = require('../../models/alumno.model');
 const { getClasesActivas } = require('../../models/profesor_asignatura.model');
 
 
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 router.get('/clases', async (req, res) => {
     try {
         const [asignaturasActivas] = await getClasesActivas();
-        console.log(req.usuario.id);
+
         const [asignaturasAlumno] = await getAsignaturasByAlumnoid(req.usuario.id);
 
         const result = asignaturasActivas.filter(asignatura1 => { return asignaturasAlumno.some(asignatura2 => asignatura1.asignatura_id === asignatura2.id) })
@@ -71,7 +71,7 @@ router.get('/nombre', async (req, res) => {
 
         res.json(alumno[0]);
 
-    } catch (error) {
+    } catch (error) { 
 
         res.json({ fatal: error.message })
     }
@@ -89,6 +89,8 @@ router.get('/profesores', async (req, res) => {
 
             const [res4] = await getProfesorById(alumno[i].profesor_id);
 
+            console.log(alumno[i].profesor_id);
+
             const [res2] = await getProfesorByUsuarioId(res4[0].usuario_id);
 
             const [res3] = await getByUsuarioId(res4[0].usuario_id);
@@ -104,7 +106,6 @@ router.get('/profesores', async (req, res) => {
             index === self.findIndex((o) => o.id === objeto.id)
         );
         
-        console.log(resultado);
         res.json(resultado);
 
     } catch (error) {
@@ -136,7 +137,8 @@ router.put('/ActualizarClase', async (req, res) => {
 
     try {
         await updateOpinionValoracion(req.body);
-        res.json("Actualizado correctamente");
+        const [resultado] = await getAsignaturasByAlumnoAndProfesor(req.body.alumno_id, req.body.profesor_id);
+        res.json(resultado[0]);
 
     } catch (error) {
         res.status(500).json({ fatal: error.message });

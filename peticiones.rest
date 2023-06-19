@@ -46,9 +46,8 @@ Content-Type: application/json
 
 ###
 
-GET {{host}}/api/alumnos/clasesActivas
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoxMCwidXN1YXJpb19yb2wiOiJhbHVtIiwiZXhwIjoxNjg2NDk1MTQwLCJpYXQiOjE2ODY0MDg3NDB9.M5XBc-1EzG4jW--j1WOGMZJSDdGu6_-dQBIPBSaO6BE
-
+GET {{host}}/api/alumnos/AllUsers
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo5NiwidXN1YXJpb19yb2wiOiJhbHVtIiwiZXhwIjoxNjg3MjE5OTE3LCJpYXQiOjE2ODcxMzM1MTd9.5HUKgs4_--r3j_E-Wd_Bp8m0A0qSZQgUuM9OCUP0Nfw
 
 ###
 

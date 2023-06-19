@@ -1,6 +1,6 @@
 const { getAsignaturasByAlumnoid, createClaseAlumno, updateOpinionValoracion, getValoracionActualizada, getAsignaturasByAlumnoAndProfesor } = require('../../models/clase.model');
 const { getProfesorByUsuarioId, getByUsuarioId } = require('../../models/profesor.model');
-const { getAll, getById, deleteById, getByNombre, getByEmail, update, getProfesorById } = require('../../models/alumno.model');
+const { getAll, getById, deleteById, getByNombre, getByEmail, update, getProfesorById, getAllUsers } = require('../../models/alumno.model');
 const { getClasesActivas } = require('../../models/profesor_asignatura.model');
 
 
@@ -9,6 +9,18 @@ const router = require('express').Router();
 router.get('/', async (req, res) => {
     try {
         const [result] = await getAll();
+
+        res.json(result);
+
+    } catch (error) {
+        res.status(503).json({ fatal: error.message });
+    }
+
+});
+
+router.get('/AllUsers', async (req, res) => {
+    try {
+        const [result] = await getAllUsers();
 
         res.json(result);
 
